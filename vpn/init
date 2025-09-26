@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 sudo apt update;
-sudo apt install microsocks;
+sudo apt install microsocks screen -y;
 
 # curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/init | bash

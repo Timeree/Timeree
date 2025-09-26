@@ -12,17 +12,6 @@ trap '
 
 echo "Waiting...";
 
-gh cs ssh -c $name "nohup microsocks -p $port & exit";
+(sleep 20; gh cs ports -c $name forward $port:$port;) &
 
-sleep 2
-
-gh cs ports -c $name forward $port:$port;
-
-while true; do
-    read -n 1 -r char
-    if [ "$char" = " " ]; then
-        echo -e "\nStop."
-        break
-    fi
-done
-
+gh cs ssh -c $name "microsocks -p $port";
