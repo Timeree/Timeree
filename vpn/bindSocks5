@@ -15,3 +15,5 @@ echo "Waiting...";
 (sleep 20; gh cs ports -c $name forward $port:$port;) &
 
 gh cs ssh -c $name "microsocks -p $port";
+
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/bindSocks5 | bash
