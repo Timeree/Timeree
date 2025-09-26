@@ -12,7 +12,7 @@ trap '
 
 echo "Waiting...";
 
-(sleep 15; gh cs ports -c $name forward $port:$port;) &
+(sleep 20; gh cs ports -c $name forward $port:$port;) &
 
 gh cs ssh -c $name "microsocks -p $port";
 
