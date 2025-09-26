@@ -3,3 +3,4 @@
 sudo apt update;
 sudo apt install microsocks;
 
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/init | bash

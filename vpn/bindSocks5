@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-name=$1;
-port=$2;
+
+name=$(gh cs ls --json name --jq '.[0].name');
+port=1080;
 
 trap '
   gh cs stop -c $name;
@@ -11,7 +12,9 @@ trap '
 
 echo "Waiting...";
 
-gh cs ssh -c $name "nohup microsocks -p $port > /dev/null 2>&1 & exit";
+gh cs ssh -c $name "nohup microsocks -p $port & exit";
+
+sleep 2
 
 gh cs ports -c $name forward $port:$port;
 
@@ -22,3 +25,4 @@ while true; do
         break
     fi
 done
+
