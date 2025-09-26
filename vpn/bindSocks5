@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+name=$1;
+port=$2;
+
+trap '
+  gh cs stop -c $name;
+' EXIT;
+
+# am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity;
+
+echo "Waiting...";
+
+gh cs ssh -c $name "nohup microsocks -p $port > /dev/null 2>&1 & exit";
+
+gh cs ports -c $name forward $port:$port;
+
+while true; do
+    read -n 1 -r char
+    if [ "$char" = " " ]; then
+        echo -e "\nStop."
+        break
+    fi
+done
