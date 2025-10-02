@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 name=$(gh cs ls --json name --jq '.[0].name');
 port=1080;
 
@@ -12,8 +11,6 @@ trap '
 
 echo "Waiting...";
 
-(sleep 20; gh cs ports -c $name forward $port:$port;) &
+gh cs ssh -c $name -- -L $port:localhost:$port "microsocks -p $port";
 
-gh cs ssh -c $name "microsocks -p $port";
-
-# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/bindSocks5 | bash
+curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/bindSocks5 | bash
