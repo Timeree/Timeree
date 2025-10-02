@@ -7,9 +7,9 @@ trap '
   gh cs stop -c $name;
 ' EXIT;
 
-# am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity;
-
 echo "Waiting...";
+
+am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity;
 
 gh cs ssh -c $name -- -L $port:localhost:$port "microsocks -p $port";
 
