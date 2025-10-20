@@ -4,13 +4,15 @@ name=$(gh cs ls --json name --jq '.[0].name');
 port=1080;
 
 trap '
+  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity;
   gh cs stop -c $name;
+  echo "Exit";
 ' EXIT;
 
 echo "Waiting...";
 
 am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity;
 
-gh cs ssh -c $name -- -L $port:localhost:$port "microsocks -p $port";
+gh cs ssh -c $name -- -L $port:localhost:$port "microsocks -p $port; read -n 1";
 
-# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/bindSocks5 | bash
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/bindSocks5 | bash;
