@@ -1,28 +1,30 @@
 #!/usr/bin/env bash
 
-am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity;
+am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
 
-CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name');
+CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
 
-SOCKS5_PORT=10351;
+SOCKS5_PORT=10351
 
-FTP_PORT=2121;
+FTP_PORT=2121
+FTP_PORT2=52121
 
 trap '
-  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity;
-  gh cs stop -c $CODESPACE_NAME;
-  echo "Exit";
+  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+  gh cs stop -c $CODESPACE_NAME
+  echo "Exit"
 ' EXIT;
 
-echo "Waiting...";
+echo "Waiting..."
 
 gh cs ssh -c $CODESPACE_NAME -- \
   -L $SOCKS5_PORT:localhost:$SOCKS5_PORT \
   -L $FTP_PORT:localhost:$FTP_PORT \
+  -L $FTP_PORT2:localhost:$FTP_PORT2 \
   "
-    microsocks -p $SOCKS5_PORT; &
-    python3 -m pyftpdlib -p $FTP_PORT -d ~; &
+    microsocks -p $SOCKS5_PORT &
+    python3 -m pyftpdlib -p $FTP_PORT -P $FTP_PORT2 -d ~ &
     tail -f /dev/null
-  ";
+  "
 
 # curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/bindSocks5 | bash;
