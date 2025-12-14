@@ -15,11 +15,11 @@ gh cs ssh -c $CODESPACE_NAME -- \
   -L $FTP_PORT:localhost:$FTP_PORT \
   -L $FTP_PORTR1:localhost:$FTP_PORTR1 \
   -L $FTP_PORTR2:localhost:$FTP_PORTR2 \
-  -L 8080:localhost:8080 \
   "
     microsocks -p $SOCKS5_PORT &
     python3 -m pyftpdlib -p $FTP_PORT -r $FTP_PORTR1-$FTP_PORTR2 -w -d ~ &
-    nginx &
+    sudo kill -9 $(sudo lsof -t -i:8080);
+    sudo nginx -c ~/nginx.conf &
     tail -f /dev/null
   "
 
