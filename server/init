@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 sudo apt update;
-sudo apt install microsocks screen -y;
+sudo apt install microsocks nginx screen -y;
 
 pip install pyftpdlib
 
+curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/nginx/nginx.conf > ~/nginx.conf;
 
-# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/init | bash
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/server/init | bash

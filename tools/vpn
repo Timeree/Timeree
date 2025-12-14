@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+
+trap '
+  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+  gh cs stop -c $CODESPACE_NAME
+  echo "Exit"
+' EXIT;
+
+bash ~/Timeree/tools/bindServer
