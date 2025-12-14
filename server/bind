@@ -8,17 +8,18 @@ FTP_PORT=2121
 FTP_PORTR1=52121
 FTP_PORTR2=52122
 
-echo "Waiting..."
+echo $CODESPACE_NAME
 
 gh cs ssh -c $CODESPACE_NAME -- \
   -L $SOCKS5_PORT:localhost:$SOCKS5_PORT \
   -L $FTP_PORT:localhost:$FTP_PORT \
   -L $FTP_PORTR1:localhost:$FTP_PORTR1 \
   -L $FTP_PORTR2:localhost:$FTP_PORTR2 \
+  -L 8080:localhost:8080 \
   "
     microsocks -p $SOCKS5_PORT &
-    python3 -m pyftpdlib -p $FTP_PORT -r $FTP_PORTR1-$FTP_PORTR2 -d ~ &
-    nginx -c ~/nginx.conf &
+    python3 -m pyftpdlib -p $FTP_PORT -r $FTP_PORTR1-$FTP_PORTR2 -w -d ~ &
+    nginx &
     tail -f /dev/null
   "
 

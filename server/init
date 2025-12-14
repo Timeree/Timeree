@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 sudo apt update;
-sudo apt install microsocks nginx screen -y;
+sudo apt install microsocks nginx nginx-extras screen -y;
 
 pip install pyftpdlib
 
