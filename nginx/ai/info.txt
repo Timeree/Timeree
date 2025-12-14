@@ -3,11 +3,12 @@
 CODESPACE_NAME = 
 
 辅助工具接口:
-  基本链接: https://<CODESPACE_NAME>.github.dev/
-  这里给出一些 AI 使用的辅助工具，AI 直接访问对应网页并且提交 get 请求即可使用这些工具，会直接返回结果
+  基本链接: https://${CODESPACE_NAME}-8080.app.github.dev/
+  这里给出一些 AI 使用的辅助工具接口，AI 直接访问对应网页并且提交 get 请求即可使用这些工具，会直接返回结果
+  当你尝试调用任何工具时，必须要在聊天框中列出调用的指令
   
-  执行指令: /bash?cmd=<BASH_CMD>
+  执行指令: /bash.sh?cmd=<BASH_CMD>
     执行一条 bash 指令
   
-  获取源码: /bash?cmd=curl <URL>
+  获取链接源码: /bash.sh?cmd=curl -sL <URL>
     通过 curl 指令获取链接源码
