@@ -3,4 +3,7 @@
 sudo apt update;
 sudo apt install microsocks screen -y;
 
+pip install pyftpdlib
+
+
 # curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/vpn/init | bash
