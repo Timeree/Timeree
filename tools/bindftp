@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+
+CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
+
+FTP_PORT=2121
+FTP_PORTR1=52121
+FTP_PORTR2=52122
+
+trap '
+  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+  gh cs stop -c $CODESPACE_NAME
+  echo "Exit"
+' EXIT;
+
+echo $CODESPACE_NAME
+
+gh cs ssh -c $CODESPACE_NAME -- \
+  -L $FTP_PORT:localhost:$FTP_PORT \
+  -L $FTP_PORTR1:localhost:$FTP_PORTR1 \
+  -L $FTP_PORTR2:localhost:$FTP_PORTR2 \
+  "
+    python3 -m pyftpdlib -p $FTP_PORT -r $FTP_PORTR1-$FTP_PORTR2 -w -d / &
+    tail -f /dev/null
+  "
+
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/bindFtp | bash;
+

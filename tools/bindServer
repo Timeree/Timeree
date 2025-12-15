@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-trap '
-  gh cs stop -c $CODESPACE_NAME
-  echo "Exit"
-' EXIT;
-
-bash ~/Timeree/server/bind

@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 
-am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
+
+SOCKS5_PORT=10351
 
 trap '
-  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+  gh cs stop -c $CODESPACE_NAME
+  echo "Exit"
 ' EXIT;
 
-bash ~/Timeree/tools/bindServer
+echo $CODESPACE_NAME
+
+gh cs ssh -c $CODESPACE_NAME -- \
+  -L $SOCKS5_PORT:localhost:$SOCKS5_PORT \
+  "
+    microsocks -p $SOCKS5_PORT &
+    tail -f /dev/null
+  "
+
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/vpn | bash;
+

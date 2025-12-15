@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+sudo apt update;
+sudo apt install microsocks screen -y;
+
+pip install pyftpdlib
+
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/initSpace | bash
