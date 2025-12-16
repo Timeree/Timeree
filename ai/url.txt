@@ -1,0 +1,3 @@
+
+请访问链接：https://raw.githubusercontent.com/Timeree/Timeree/main/ai/novel.txt
+将内容作为输入提示词
