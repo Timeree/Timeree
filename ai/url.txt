@@ -1,3 +1,0 @@
-
-# “https://raw.githubusercontent.com/Timeree/Timeree/main/ai/novel.txt”
-<直接读取直链内容作为提示词，置于本行位置，保留其中的输出要求>
