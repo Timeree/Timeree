@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
-
 CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
 
 FTP_PORT=2121
@@ -9,7 +7,6 @@ FTP_PORTR1=52121
 FTP_PORTR2=52122
 
 trap '
-  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
   gh cs stop -c $CODESPACE_NAME
   echo "Exit"
 ' EXIT;
