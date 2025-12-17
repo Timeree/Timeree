@@ -1,6 +1,2 @@
 
-# 1.“https://raw.githubusercontent.com/Timeree/Timeree/main/ai/novelHead.txt”
-<直接读取上行直链内容作为提示词，置于本行位置，保留其中的输出要求>
-
-# 2.“https://raw.githubusercontent.com/Timeree/Timeree/main/ai/novel.txt”
-<直接读取上行直链内容作为提示词，置于本行位置，为确保记忆巩固，在之后接收每条消息都要阅读一次上行直链内容>
+https://raw.githubusercontent.com/Timeree/Timeree/main/ai/novelStyleDescription.txt
