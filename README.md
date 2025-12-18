@@ -1,7 +1,9 @@
 
 # 这里没有宝藏
 
-自用的仓库，包含一些私有工具
+自己用的仓库，包含一些私有工具
 
-为了多设备使用方便，故设为 public
-
+```bash
+  cd ~
+  git clone https://github.com/Timeree/Timeree.git
+```
