@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>解密内容</h1>
+    <p>正在尝试读取并解密文件...</p>
+    <div id="status">加载中...</div>
+    <pre id="content"></pre>
+
+    <script>
+        // https://raw.githubusercontent.com/Timeree/Timeree/main/private/read.html
+        
+        // 从 URL 参数获取 key 和 path
+        const urlParams = new URLSearchParams(window.location.search);
+        const keyHex = urlParams.get('key');  // 假设 key 是 32 字节的 hex 字符串 (AES-256)
+        const path = urlParams.get('path');    // 加密文件的 URL 路径
+
+        if (!keyHex || !path) {
+            document.getElementById('status').textContent = '错误：缺少 key 或 path 参数';
+            throw new Error('缺少参数');
+        }
+
+        // 将 hex 字符串转换为 Uint8Array
+        function hexToUint8Array(hex) {
+            if (hex.length % 2 !== 0) throw new Error('无效的 hex 字符串');
+            const array = new Uint8Array(hex.length / 2);
+            for (let i = 0; i < hex.length; i += 2) {
+                array[i / 2] = parseInt(hex.substr(i, 2), 16);
+            }
+            return array;
+        }
+
+        const keyData = hexToUint8Array(keyHex);
+
+        // 假设加密文件格式：前12字节 IV + 后16字节 auth tag + 中间 ciphertext
+        async function decryptFile() {
+            try {
+                // 读取加密文件 (假设是 binary)
+                const response = await fetch(path);
+                if (!response.ok) throw new Error('无法读取文件: ' + response.statusText);
+                const encryptedData = new Uint8Array(await response.arrayBuffer());
+
+                if (encryptedData.length < 28) throw new Error('文件太小，无法解密');
+
+                const iv = encryptedData.slice(0, 12);
+                const tag = encryptedData.slice(encryptedData.length - 16);
+                const ciphertext = encryptedData.slice(12, encryptedData.length - 16);
+
+                // 导入 key
+                const cryptoKey = await crypto.subtle.importKey(
+                    'raw',
+                    keyData,
+                    { name: 'AES-GCM' },
+                    false,
+                    ['decrypt']
+                );
+
+                // 解密 (tag 会自动验证)
+                const decryptedBuffer = await crypto.subtle.decrypt(
+                    {
+                        name: 'AES-GCM',
+                        iv: iv,
+                        tag: tag  // Web Crypto 需要单独传递 tag
+                    },
+                    cryptoKey,
+                    ciphertext
+                );
+
+                // 假设解密内容是 UTF-8 文本
+                const decryptedText = new TextDecoder('utf-8').decode(decryptedBuffer);
+
+                document.getElementById('status').textContent = '解密成功！';
+                document.getElementById('content').textContent = decryptedText;
+            } catch (err) {
+                document.getElementById('status').textContent = '解密失败: ' + err.message;
+                console.error(err);
+            }
+        }
+
+        decryptFile();
+    </script>
+</body>
+</html>
