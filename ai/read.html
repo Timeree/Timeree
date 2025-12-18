@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>按密码解压压缩包并显示指定路径文件内容</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif; margin: 24px; line-height: 1.6; }
+    h1 { font-size: 20px; margin-bottom: 12px; }
+    label { display: block; margin: 12px 0 6px; font-weight: 600; }
+    input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 14px; padding: 10px 14px; border: none; border-radius: 6px; background: #2c7be5; color: #fff; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    .status { margin-top: 12px; color: #555; }
+    .error { color: #c62828; white-space: pre-wrap; }
+    .output { margin-top: 16px; padding: 12px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; white-space: pre-wrap; word-break: break-word; }
+    .mono  { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+<body>
+  <h1>📦 解压并显示指定文件内容</h1>
+
+  <label for="url">压缩包直链 URL（支持 .zip）</label>
+  <input id="url" type="url" placeholder="例如：https://example.com/archive.zip" />
+
+  <label for="password">解压密码（如不需要可留空）</label>
+  <input id="password" type="text" placeholder="例如：123456 或留空" />
+
+  <label for="path">目标文件路径（区分大小写，使用压缩包内的完整相对路径）</label>
+  <input id="path" type="text" placeholder="例如：docs/readme.txt 或 index.html" />
+
+  <button id="run">提取并显示</button>
+
+  <div class="status mono" id="status">状态：等待输入…</div>
+  <div class="error mono" id="error"></div>
+  <div class="output mono" id="output" aria-live="polite"></div>
+
+  <!-- 使用 ESM 方式加载 zip.js（支持加密 ZIP） -->
+  <script type="module">
+    import * as zip from "https://unpkg.com/@zip.js/zip.js/dist/zip.js";
+
+    const $ = (id) => document.getElementById(id);
+    const btn = $("run");
+    const statusEl = $("status");
+    const errorEl = $("error");
+    const outputEl = $("output");
+
+    function setStatus(text) {
+      statusEl.textContent = "状态：" + text;
+    }
+    function setError(text) {
+      errorEl.textContent = text || "";
+    }
+    function setOutput(text) {
+      outputEl.textContent = text || "";
+    }
+
+    async function fetchZipBlob(url) {
+      // 如遇到跨域（CORS）限制，需要确保服务器允许跨域或通过代理解决
+      const resp = await fetch(url, {
+        mode: "cors",
+        cache: "no-store",
+      });
+      if (!resp.ok) {
+        throw new Error(`下载失败：HTTP ${resp.status} ${resp.statusText}`);
+      }
+      const contentType = resp.headers.get("content-type") || "";
+      if (!contentType.includes("zip") && !url.toLowerCase().endsWith(".zip")) {
+        // 非严格校验，仅提示；某些服务器不会正确设置 content-type
+        console.warn("警告：content-type 非 zip，仍尝试解析。");
+      }
+      return await resp.blob();
+    }
+
+    async function extractFileFromZip(blob, password, targetPath) {
+      // zip.js 支持加密 ZIP（传统 ZipCrypto 与 AES），通过 password 选项解密
+      const options = {};
+      if (password && password.trim().length > 0) {
+        options.password = password.trim();
+      }
+
+      // 建立 ZipReader；可传入 onprogress 以显示进度
+      const reader = new zip.ZipReader(new zip.BlobReader(blob), {
+        // 读取 entries 列表的进度（不一定所有服务器都能精确给出）
+        onprogress: (progress, total) => {
+          if (total && total > 0) {
+            setStatus(`解析压缩包目录中… ${(progress / total * 100).toFixed(1)}%`);
+          } else {
+            setStatus(`解析压缩包目录中… ${progress} bytes`);
+          }
+        }
+      });
+
+      try {
+        const entries = await reader.getEntries();
+        if (!entries || entries.length === 0) {
+          throw new Error("压缩包为空或无法读取内容。");
+        }
+
+        // 归一化比较：zip 内通常使用正斜杠
+        const normalize = (p) => p.replace(/\\/g, "/");
+        const wanted = normalize(targetPath);
+
+        // 在 entries 中查找目标文件；忽略目录项（directory === true）
+        const entry = entries.find(e => !e.directory && normalize(e.filename) === wanted);
+        if (!entry) {
+          // 支持模糊匹配（回退）：尝试大小写敏感失败后，提示最接近的路径
+          const candidates = entries
+            .filter(e => !e.directory)
+            .map(e => e.filename);
+          throw new Error(
+            "未找到目标文件：" + wanted +
+            (candidates.length ? "\n可用文件示例：\n" + candidates.slice(0, 10).join("\n") + (candidates.length > 10 ? "\n…" : "") : "")
+          );
+        }
+
+        // 将文件以文本形式读取（也可使用 Uint8ArrayWriter / BlobWriter 处理二进制）
+        // 若是二进制文件（如图片），建议改用 BlobWriter 再转成 dataURL 显示
+        const text = await entry.getData(new zip.TextWriter(), {
+          onprogress: (progress, total) => {
+            if (total && total > 0) {
+              setStatus(`读取文件内容中… ${(progress / total * 100).toFixed(1)}%`);
+            } else {
+              setStatus(`读取文件内容中… ${progress} bytes`);
+            }
+          }
+        });
+
+        return text;
+      } finally {
+        await reader.close();
+      }
+    }
+
+    btn.addEventListener("click", async () => {
+      setError("");
+      setOutput("");
+      const url = $("url").value.trim();
+      const password = $("password").value.trim();
+      const targetPath = $("path").value.trim();
+
+      if (!url) {
+        setError("请填写压缩包直链 URL。");
+        return;
+      }
+      if (!targetPath) {
+        setError("请填写目标文件路径（压缩包内的相对路径）。");
+        return;
+      }
+
+      btn.disabled = true;
+      setStatus("开始下载压缩包…");
+
+      try {
+        const blob = await fetchZipBlob(url);
+        setStatus("下载完成，开始解析与解密…");
+        const text = await extractFileFromZip(blob, password, targetPath);
+        setStatus("提取完成 ✅");
+        setOutput(text);
+      } catch (err) {
+        console.error(err);
+        setStatus("出现错误 ❌");
+        setError(String(err?.message || err));
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
