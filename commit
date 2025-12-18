@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export http_proxy=socks5://0.0.0.0:10351
+
 git add .
 
 msg=$(date +%s | sha256sum | head -c 8)
