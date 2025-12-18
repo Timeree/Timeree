@@ -3,8 +3,8 @@
 (
   cd ~
   
-  git clone Timeree/Timeree.git
+  git clone https://github.com/Timeree/Timeree.git
 )
 
 
-# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/initSpace | bash
+# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/dntimeree | bash
