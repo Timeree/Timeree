@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+chmod +x ~/Timeree/tools/*
+
 (
   cd ~/Timeree || exit
 

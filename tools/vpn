@@ -28,5 +28,7 @@ gh cs ssh -c $CODESPACE_NAME -- \
     tail -f /dev/null
   "
 
+termux-toast "OK"
+
 # curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/vpn | bash;
 
