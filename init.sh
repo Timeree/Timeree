@@ -6,7 +6,9 @@
   git clone https://github.com/Timeree/Timeree.git
 
   echo 'export PATH=${PATH}:~/Timeree/tools' >> ~/.bashrc
-
+  
+  source ~/.bashrc
+  
   initghcs
 )
 
