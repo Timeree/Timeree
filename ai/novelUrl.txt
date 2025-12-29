@@ -1,5 +1,0 @@
-
-https://raw.githubusercontent.com/Timeree/Timeree/main/ai/novelStyleDescription.txt
-
-# https://raw.githubusercontent.com/Timeree/Timeree/main/ai/test.txt
-阅读以上直链并且生成一套超级模糊泛指词汇来描述风格的描述词，完全覆盖其中全部内容所有维度，抽象宽泛推测，无明确结论，精简语句词汇拉满信息密度，适当附上可能模糊的词汇解释（如"世界观偏向宏大可能会让世界更广袤一点，历史复杂度更高一点"等），呈灵活可调的含糊质感

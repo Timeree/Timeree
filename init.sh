@@ -9,7 +9,6 @@
   
   source ~/.bashrc
   
-  initghcs
 )
 
 # curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/init.sh | bash
