@@ -24,11 +24,8 @@ echo $CODESPACE_NAME
 gh cs ssh -c $CODESPACE_NAME -- \
   -L $SOCKS5_PORT:localhost:$SOCKS5_PORT \
   "
-    microsocks -p $SOCKS5_PORT &
-    tail -f /dev/null
+    microsocks -p $SOCKS5_PORT
   "
-
-termux-toast "OK"
 
 # curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/vpn | bash;
 

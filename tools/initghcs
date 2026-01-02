@@ -7,4 +7,7 @@ pip install pyftpdlib
 
 
 
-# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/initghcs | bash
+# curl -fsSL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/initghcs | bash
+
+# curl -fsSL https://ollama.com/install.sh | sh
+

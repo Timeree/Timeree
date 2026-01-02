@@ -18,7 +18,6 @@ gh cs ssh -c $CODESPACE_NAME -- \
   -L $FTP_PORTR1:localhost:$FTP_PORTR1 \
   -L $FTP_PORTR2:localhost:$FTP_PORTR2 \
   "
-    python3 -m pyftpdlib -p $FTP_PORT -r $FTP_PORTR1-$FTP_PORTR2 -w -d / &
-    tail -f /dev/null
+    python3 -m pyftpdlib -p $FTP_PORT -r $FTP_PORTR1-$FTP_PORTR2 -w -d /
   "
 
