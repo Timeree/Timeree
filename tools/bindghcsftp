@@ -8,7 +8,6 @@ FTP_PORTR2=52122
 
 trap '
   gh cs stop -c $CODESPACE_NAME
-  echo "Exit"
 ' EXIT;
 
 echo $CODESPACE_NAME
