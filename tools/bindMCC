@@ -10,6 +10,6 @@ echo $CODESPACE_NAME
 
 gh cs ssh -c $CODESPACE_NAME \
   "
-    mccx86 $MCC_USERNAME - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'
+    ./tools/mccx86 $MCC_USERNAME - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'
   "
 
