@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
+
+trap '
+  gh cs stop -c $CODESPACE_NAME
+' EXIT;
+
+echo $CODESPACE_NAME
+
+gh cs ssh -c $CODESPACE_NAME \
+  "
+    mccx86 $MCC_USERNAME - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'
+  "
+
