@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+SOCKS5_PORT=10351
+
+am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+
+CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
+
+trap '
+  am start -n com.github.metacubex.clash.meta/com.github.kr328.clash.MainActivity
+  echo "Exit"
+' EXIT;
+
+echo $CODESPACE_NAME
+
+gh cs ssh -c $CODESPACE_NAME -- \
+  -L $SOCKS5_PORT:localhost:$SOCKS5_PORT \
+  "
+    microsocks -p $SOCKS5_PORT
+  "
