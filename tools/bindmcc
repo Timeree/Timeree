@@ -2,6 +2,10 @@
 
 CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
 
+trap '
+  gh cs stop -c $CODESPACE_NAME
+' EXIT;
+
 echo $CODESPACE_NAME
 
 gh cs ssh -c $CODESPACE_NAME -- \
