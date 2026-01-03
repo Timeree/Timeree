@@ -8,12 +8,12 @@ trap '
 
 echo $CODESPACE_NAME
 
-gh cs ssh -c $CODESPACE_NAME \
+gh cs ssh -c $CODESPACE_NAME -- \
   "
-    if [ ! -f "./mccx86" ]; then
-      curl -fsSL "" -o "./mccx86"
-      chmod +x "./mccx86"
-    else
-      ./mccx86 $MCC_USERNAME - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'
-    fi
+    ./mccx86 $MCC_USERNAME - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'    
+  "
+
+gh cs ssh -c $CODESPACE_NAME -- \
+  "
+    ./mccx86 $MCC_USERNAME2 - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'    
   "
