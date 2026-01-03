@@ -10,6 +10,10 @@ echo $CODESPACE_NAME
 
 gh cs ssh -c $CODESPACE_NAME \
   "
-    ./tools/mccx86 $MCC_USERNAME - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'
+    if [ ! -f "./mccx86" ]; then
+      curl -fsSL "" -o "./mccx86"
+      chmod +x "./mccx86"
+    else
+      ./mccx86 $MCC_USERNAME - $MCC_SERVER '/l $MCC_PASSWORD\n/home\n'
+    fi
   "
-

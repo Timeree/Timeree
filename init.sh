@@ -7,9 +7,8 @@
 
   echo 'export PATH=${PATH}:~/Timeree/tools' >> ~/.bashrc
   
-  source ~/.bashrc
-  
+  echo "source ~/.bashrc"
 )
 
-# curl -sL https://raw.githubusercontent.com/Timeree/Timeree/main/init.sh | bash
+# curl -fsSL https://raw.githubusercontent.com/Timeree/Timeree/main/init.sh | bash
 
