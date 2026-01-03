@@ -2,6 +2,6 @@
 
 CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
 
-gh cs delete -c CODESPACE_NAME
+gh cs delete -c $CODESPACE_NAME
 
-gh cs create Timetee/Timetee
+gh cs create --repo Timetee/Timetee
