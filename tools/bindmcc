@@ -12,6 +12,7 @@ gh cs ssh -c $CODESPACE_NAME -- \
       sleep 2
       echo \"/home\" &
     ) | ~/mccx86 $MCC_USERNAME - $MCC_SERVER &
+    sleep 10
   "
 
 gh cs ssh -c $CODESPACE_NAME -- \
