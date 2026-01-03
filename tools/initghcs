@@ -5,8 +5,8 @@ sudo apt install microsocks -y;
 
 pip install pyftpdlib
 
-curl -fsSL "https://github.com/MCCTeam/Minecraft-Console-Client/releases/download/20250522-285/MinecraftClient-20250522-285-linux-x64" -o "./mccx86"
-chmod +x "./mccx86"
+curl -fsSL "https://github.com/MCCTeam/Minecraft-Console-Client/releases/download/20250522-285/MinecraftClient-20250522-285-linux-x64" -o "~/mccx86"
+chmod +x "~/mccx86"
 
 # curl -fsSL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/initghcs | bash
 
