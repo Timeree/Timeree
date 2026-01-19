@@ -8,26 +8,19 @@ trap '
 
 echo $CODESPACE_NAME
 
-(while true; do
-  sleep 180
-  echo "# runing..."
-done) | gh cs ssh -c $CODESPACE_NAME -- \
-  "
+while true
+    sleep 180
+    echo "# running..."
+end | gh cs ssh -- "
     (
-      sleep 5
-      echo \"/l $MCC_PASSWORD\" &
-      sleep 2
-      echo \"/home\" &
-    ) | ~/mccx86 $MCC_USERNAME - $MCC_SERVER &
+        sleep 5
+        echo \"/l \$MCC_PASSWORD\" &
+    ) | ~/mccx86 \$MCC_USERNAME - \$MCC_SERVER &
     sleep 10
-    
+
     (
-      sleep 5
-      echo \"/l $MCC_PASSWORD\" &
-      sleep 2
-      echo \"/home\" &
-    ) | ~/mccx86 $MCC_USERNAME2 - $MCC_SERVER
-    exit
-  "
-
-
+        sleep 5
+        echo \"/l \$MCC_PASSWORD\" &
+    ) | ~/mccx86 \$MCC_USERNAME2 - \$MCC_SERVER &
+    sleep 10
+"
