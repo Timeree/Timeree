@@ -13,9 +13,7 @@
             padding: 40px;
             text-align: center;
         }
-        h1 {
-            color: #00ff9d;
-        }
+        h1 { color: #00ff9d; }
         button {
             background: #00ff9d;
             color: #000;
@@ -27,10 +25,7 @@
             cursor: pointer;
             margin: 30px 0;
         }
-        button:hover {
-            background: #00cc7a;
-            transform: scale(1.08);
-        }
+        button:hover { background: #00cc7a; transform: scale(1.08); }
         .result {
             margin-top: 40px;
             font-size: 28px;
@@ -40,11 +35,7 @@
             display: inline-block;
             min-width: 400px;
         }
-        .loading {
-            color: #ffaa00;
-            font-size: 20px;
-            margin: 20px;
-        }
+        .error { color: #ff5555; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -53,61 +44,52 @@
     
     <button onclick="getRandomStock()">随机抽一支 A 股</button>
     
-    <div id="loading" class="loading" style="display: none;">正在抽取...</div>
-    
-    <div id="result" class="result" style="display: none;">
-        <div id="stockInfo"></div>
-    </div>
+    <div id="result" class="result" style="display: none;"></div>
+    <div id="error" class="error"></div>
 
     <script>
-        async function getAllStocks() {
-            // 使用东方财富公开接口获取 A 股列表
-            const url = "https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23&fields=f12,f14";
-            const res = await fetch(url);
-            const data = await res.json();
-            return data.data.diff || [];
-        }
-
         async function getRandomStock() {
             const btn = document.querySelector('button');
-            const loading = document.getElementById('loading');
-            const result = document.getElementById('result');
-            const info = document.getElementById('stockInfo');
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
 
             btn.disabled = true;
-            loading.style.display = 'block';
-            result.style.display = 'none';
+            resultDiv.style.display = 'none';
+            errorDiv.textContent = '';
 
             try {
-                const stocks = await getAllStocks();
+                // 使用雪球公开接口获取 A 股列表（更稳定）
+                const res = await fetch('https://xueqiu.com/service/v5/stock/screener/quote/list?type=sha&order=desc&orderby=percent&page=1&size=200', {
+                    headers: { 'User-Agent': 'Mozilla/5.0' }
+                });
                 
-                if (stocks.length === 0) {
-                    throw new Error("无法获取股票列表");
-                }
+                if (!res.ok) throw new Error('网络请求失败');
 
-                // 随机抽一只（尽量避开 ST）
+                const data = await res.json();
+                const stocks = data.data.list || [];
+
+                if (stocks.length === 0) throw new Error('没有获取到股票数据');
+
+                // 随机抽一只（避开 ST）
                 let stock;
                 do {
                     stock = stocks[Math.floor(Math.random() * stocks.length)];
-                } while (stock.f14.includes('ST') || stock.f14.includes('*ST'));
+                } while (!stock || stock.name.includes('ST') || stock.name.includes('*'));
 
-                const code = stock.f12;
-                const name = stock.f14;
+                const code = stock.symbol.replace('SH', '').replace('SZ', '');
+                const name = stock.name;
 
-                info.innerHTML = `
+                resultDiv.innerHTML = `
                     <strong>${name}</strong><br>
-                    <span style="font-size: 32px; color: #ffffff;">${code}</span>
+                    <span style="font-size: 36px; color: #ffffff;">${code}</span>
                 `;
-
-                result.style.display = 'inline-block';
+                resultDiv.style.display = 'inline-block';
 
             } catch (err) {
-                info.innerHTML = "获取失败，请稍后再试～";
-                result.style.display = 'inline-block';
                 console.error(err);
+                errorDiv.textContent = '获取失败：' + err.message + '\n可能是网络问题或接口临时限制，请稍等 10 秒再试一次。';
             } finally {
                 btn.disabled = false;
-                loading.style.display = 'none';
             }
         }
     </script>
