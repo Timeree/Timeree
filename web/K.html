@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机 A 股</title>
+    <style>
+        body {
+            background: #0f0f0f;
+            color: #00ff9d;
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            color: #00ff9d;
+        }
+        button {
+            background: #00ff9d;
+            color: #000;
+            border: none;
+            padding: 18px 50px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 30px 0;
+        }
+        button:hover {
+            background: #00cc7a;
+            transform: scale(1.08);
+        }
+        .result {
+            margin-top: 40px;
+            font-size: 28px;
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 12px;
+            display: inline-block;
+            min-width: 400px;
+        }
+        .loading {
+            color: #ffaa00;
+            font-size: 20px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎲 随机 A 股抽取器</h1>
+    <p>点击按钮，随机获取一支 A 股</p>
+    
+    <button onclick="getRandomStock()">随机抽一支 A 股</button>
+    
+    <div id="loading" class="loading" style="display: none;">正在抽取...</div>
+    
+    <div id="result" class="result" style="display: none;">
+        <div id="stockInfo"></div>
+    </div>
+
+    <script>
+        async function getAllStocks() {
+            // 使用东方财富公开接口获取 A 股列表
+            const url = "https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23&fields=f12,f14";
+            const res = await fetch(url);
+            const data = await res.json();
+            return data.data.diff || [];
+        }
+
+        async function getRandomStock() {
+            const btn = document.querySelector('button');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const info = document.getElementById('stockInfo');
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+
+            try {
+                const stocks = await getAllStocks();
+                
+                if (stocks.length === 0) {
+                    throw new Error("无法获取股票列表");
+                }
+
+                // 随机抽一只（尽量避开 ST）
+                let stock;
+                do {
+                    stock = stocks[Math.floor(Math.random() * stocks.length)];
+                } while (stock.f14.includes('ST') || stock.f14.includes('*ST'));
+
+                const code = stock.f12;
+                const name = stock.f14;
+
+                info.innerHTML = `
+                    <strong>${name}</strong><br>
+                    <span style="font-size: 32px; color: #ffffff;">${code}</span>
+                `;
+
+                result.style.display = 'inline-block';
+
+            } catch (err) {
+                info.innerHTML = "获取失败，请稍后再试～";
+                result.style.display = 'inline-block';
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
