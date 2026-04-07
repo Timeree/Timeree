@@ -13,7 +13,7 @@ chmod +x ~/Timeree/tools/*
   
   if [ "$1" = "push" ]; then
   
-    git push
+    git push --force
     
     exit 0
     
