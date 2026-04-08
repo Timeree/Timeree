@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>碰撞游戏</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#000}
+    canvas{display:block}
+  </style>
+</head>
+<body>
+<div id="log" style="color:#fff; font-size:12px; padding:10px; background:#222; position:fixed; bottom:0; left:0; right:0; z-index:999"></div>
+<script>
+console.log = function(msg){
+  document.getElementById('log').textContent += msg + '\n';
+}
+window.onerror = function(msg){
+  document.getElementById('log').textContent += 'ERROR: ' + msg;
+}
+</script>
+
+<canvas id="canvas"></canvas>
+<script src="./planck.min.js"></script>
+<script src="./game.js"></script>
+
+</body>
+
+</html>
