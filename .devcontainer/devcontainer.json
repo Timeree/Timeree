@@ -1,0 +1,8 @@
+{
+  "name": "minimal",
+  "build": { "dockerfile": "Dockerfile" },
+  "features": {},
+  "extensions": [],
+  "settings": { "extensions.autoInstall": "none" },
+  "remoteUser": "vscode"
+}
