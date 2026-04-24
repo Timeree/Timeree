@@ -4,6 +4,10 @@
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "installPip": true
+    },
+    
+    "ghcr.io/devcontainers/features/sshd:1": {
+        "version": "latest"
     }
   },
   "customizations": {
@@ -14,3 +18,4 @@
   "forwardPorts": [],
   "remoteUser": "vscode"
 }
+
