@@ -1,8 +1,16 @@
 {
-  "name": "minimal",
-  "build": { "dockerfile": "Dockerfile" },
-  "features": {},
-  "extensions": [],
-  "settings": { "extensions.autoInstall": "none" },
+  "name": "Minimal-Apt-Pip",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "installPip": true
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  },
+  "forwardPorts": [],
   "remoteUser": "vscode"
 }
