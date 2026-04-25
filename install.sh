@@ -18,3 +18,5 @@
   source $PREFIX/etc/profile.d/timeree.sh
   
 )
+
+# curl -fsSL https://raw.githubusercontent.com/Timeree/Timeree/main/install.sh
