@@ -13,7 +13,7 @@
 
   echo 'export PATH="$PATH:$HOME/Timeree/tools"' > "$PREFIX/etc/profile.d/timeree.sh"
   
-  chmod 644 "$PREFIX/etc/profile.d/timeree.sh"
+  chmod +x "$PREFIX/etc/profile.d/timeree.sh"
 
   source $PREFIX/etc/profile.d/timeree.sh
   
