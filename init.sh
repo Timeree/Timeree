@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 
 (
-  cd ~
+  set -eux
+
+  cd ~ || exit
 
   git clone https://github.com/Timeree/Timeree.git
 
-  echo 'export PATH=${PATH}:~/Timeree/tools' >> ~/.bashrc
+  : 'export PATH="${PATH}:$HOME/Timeree/tools"' > "$PREFIX/etc/profile.d/timeree.sh"
   
-  echo "source ~/.bashrc"
+  chmod 644 "$PREFIX/etc/profile.d/timeree.sh"
+
+  source $PREFIX/etc/profile.d/timeree.sh
+  
 )
+
 
 # curl -fsSL https://raw.githubusercontent.com/Timeree/Timeree/main/init.sh | bash
 
