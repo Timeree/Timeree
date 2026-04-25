@@ -2,4 +2,4 @@
 
 rm -i $PREFIX/etc/profile.d/timeree.sh
 
-rm -Ir ~/Timeree
+rm -rf ~/Timeree
