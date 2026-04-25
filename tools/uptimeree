@@ -8,14 +8,11 @@ chmod +x ~/Timeree/tools/*
   git add .
 
   msg=$(date +%s | sha256sum | head -c 8)
+  git commit -m "$msg" 2>/dev/null
 
-  git commit -m "$msg"
-  
   if [ "$1" = "push" ]; then
-  
     git push --force
-    
-    exit 0
-    
   fi
+
+  git gc --prune=now
 )
