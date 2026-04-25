@@ -5,7 +5,11 @@
 
   cd ~ || exit
 
-  git clone https://github.com/Timeree/Timeree.git
+  if [ -d "$HOME/Timeree" ]; then
+    cd "$HOME/Timeree" && git pull --ff-only
+  else
+    git clone https://github.com/Timeree/Timeree.git "$HOME/Timeree"
+  fi
 
   : 'export PATH="${PATH}:$HOME/Timeree/tools"' > "$PREFIX/etc/profile.d/timeree.sh"
   
