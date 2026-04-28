@@ -25,5 +25,5 @@
   },
   "forwardPorts": [],
   "remoteUser": "vscode",
-  "postCreateCommand": "apt update && apt install -y curl wget zip unzip build-essential"
+  "postCreateCommand": "apt update && apt install -y curl wget zip unzip microsocks build-essential; pip install pyftpdlib;"
 }

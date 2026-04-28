@@ -9,8 +9,3 @@ gh cs create --repo Timeree/Timeree
 CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
 
 echo $CODESPACE_NAME
-
-gh cs ssh -c $CODESPACE_NAME -- \
-  "
-    curl -fsSL https://raw.githubusercontent.com/Timeree/Timeree/main/tools/initghcs | bash
-  "
