@@ -3,11 +3,19 @@
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
-      "installPip": true
+      "installPip": true,
+      "installConda": true
     },
-    
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts",
+      "installYarn": true,
+      "installPnpm": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
     "ghcr.io/devcontainers/features/sshd:1": {
-        "version": "latest"
+      "version": "latest"
     }
   },
   "customizations": {
@@ -16,5 +24,6 @@
     }
   },
   "forwardPorts": [],
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "postCreateCommand": "apt update && apt install -y curl wget zip unzip build-essential"
 }
