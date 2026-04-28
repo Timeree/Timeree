@@ -1,29 +1,12 @@
 {
-  "name": "Minimal-Apt-Pip",
+  "name": "Minimal-Ubuntu-Tools",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
-  "features": {
-    "ghcr.io/devcontainers/features/python:1": {
-      "installPip": true,
-      "installConda": true
-    },
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "lts",
-      "installYarn": true,
-      "installPnpm": true
-    },
-    "ghcr.io/devcontainers/features/git:1": {
-      "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/sshd:1": {
-      "version": "latest"
-    }
-  },
+  "features": {},
   "customizations": {
     "vscode": {
       "extensions": []
     }
   },
-  "forwardPorts": [],
   "remoteUser": "vscode",
-  "postCreateCommand": "apt update && apt install -y curl wget zip unzip microsocks build-essential; pip install pyftpdlib;"
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y python3 python3-pip && pip3 install pyftpdlib microsocks"
 }
