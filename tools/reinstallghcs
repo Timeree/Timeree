@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
-CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
+(
+  set -eux
 
-gh cs delete -c $CODESPACE_NAME
+  cd . || exit
 
-gh cs create --repo Timeree/Timeree
+  CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
 
-CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
+  gh cs delete -c $CODESPACE_NAME
 
-echo $CODESPACE_NAME
+  gh cs create --repo Timeree/Timeree
+
+  CODESPACE_NAME=$(gh cs ls --json name --jq '.[0].name')
+
+  echo $CODESPACE_NAME
+
+)
